@@ -3,7 +3,7 @@ from PIL import Image
 import requests
 
 # Update this URL to your hosted backend
-API_URL = "https://guddu-1.onrender.com"  
+API_URL = "https://guddu-1.onrender.com/analyze-image/"  
 
 st.set_page_config(page_title="Financial Image Tagger", layout="centered")
 st.title("📊 Financial Image Tag Analyzer")
