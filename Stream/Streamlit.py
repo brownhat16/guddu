@@ -1,35 +1,28 @@
-import requests
 import streamlit as st
+from PIL import Image
+import requests
 
-# Your backend API URL on Render
-API_URL = "https://your-backend-app.onrender.com"
+# Update this URL to your hosted backend
+API_URL = "https://guddu-1.onrender.com"  
 
-st.title("ML Model Demo")
-st.write("Enter parameters to get predictions from the model")
+st.set_page_config(page_title="Financial Image Tagger", layout="centered")
+st.title("📊 Financial Image Tag Analyzer")
 
-# Create input fields for your model parameters
-# For example, if your model predicts based on 4 parameters:
-param1 = st.slider("Parameter 1", 0.0, 10.0, 5.0)
-param2 = st.slider("Parameter 2", 0.0, 10.0, 5.0)
-param3 = st.slider("Parameter 3", 0.0, 10.0, 5.0)
-param4 = st.slider("Parameter 4", 0.0, 10.0, 5.0)
+uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
-# Create a button to trigger the prediction
-if st.button("Predict"):
-    # Prepare the data to send to your API
-    data = {
-        "param1": param1,
-        "param2": param2,
-        "param3": param3,
-        "param4": param4
-    }
+if uploaded_file:
+    st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
 
-    # Make the API call to your backend
-    response = requests.post(f"{API_URL}/predict", json=data)
+    if st.button("Analyze Image"):
+        with st.spinner("Analyzing..."):
+            files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+            response = requests.post(API_URL, files=files)
 
-    # Display the results
-    if response.status_code == 200:
-        prediction = response.json()
-        st.success(f"Prediction: {prediction['result']}")
-    else:
-        st.error(f"Error: {response.status_code} - {response.text}")
+            if response.status_code == 200:
+                result = response.json()
+                st.success("Tags extracted:")
+                for category, tags in result["results"].items():
+                    st.subheader(category)
+                    st.json(tags)
+            else:
+                st.error(f"Error: {response.status_code} - {response.text}")
