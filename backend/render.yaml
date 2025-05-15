@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: fastapi-financial-backend
+    runtime: python
+    buildCommand: pip install -r Backend/requirements.txt
+    startCommand: uvicorn Backend.main:app --host 0.0.0.0 --port 8080
+    envVars:
+      - key: TOGETHER_API_KEY
+        value: 75a0e63016bec427f1c7b3c44aa87d3d9763621be4f24025066ecc4500c137cc
+    plan: free
