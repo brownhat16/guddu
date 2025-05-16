@@ -46,7 +46,7 @@ os.makedirs("temp_uploads", exist_ok=True)
 os.makedirs("visualizations", exist_ok=True)
 
 # Get API key from environment variables
-TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY", "ceeabe5b322559bd0fe8a21e18df89860cf31aa2af6e4b31cc60acd299f2d9c0")
+TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY", "50f7427ca836843296c3ceccd2092c504ca45f20e30cb922e0c35cfb7046aeb0")
 
 # Initialize the analyzer when the app starts
 logger.info("Initializing the EnhancedFinancialImageAnalyzer. This may take a few moments...")
