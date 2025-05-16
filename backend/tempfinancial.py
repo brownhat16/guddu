@@ -131,7 +131,8 @@ class ObjectDetectionModule:
         self._init_detr()
 
         try:
-            image = Image.open(image_path)
+            # FIX: Always convert image to RGB for DETR
+            image = Image.open(image_path).convert("RGB")
             inputs = self.detr_processor(images=image, return_tensors="pt")
             outputs = self.detr_model(**inputs)
 
@@ -815,6 +816,12 @@ Format your response as a structured JSON."""
             if not verified_objects and detections:
                 verified_objects = [det["class"] for det in detections]
 
+            # --- FIX: Only use strings when joining or making sets ---
+            objects_str = ", ".join(set(
+                obj if isinstance(obj, str) else str(obj)
+                for obj in verified_objects
+            )) if verified_objects else "None"
+
             # Check for brand logos
             has_logo = any("logo" in det["class"].lower() for det in detections)
             if not has_logo and "brand logo" in str(verification_result).lower():
@@ -825,14 +832,14 @@ Format your response as a structured JSON."""
             if has_logo:
                 logo_detections = [det for det in detections if "logo" in det["class"].lower()]
                 if logo_detections:
-                    # Calculate logo size based on bounding box area relative to image size
                     img = cv2.imread(image_path)
                     img_area = img.shape[0] * img.shape[1]
-                    logo_det = max(logo_detections,
-                                   key=lambda x: (x["box"][2] - x["box"][0]) * (x["box"][3] - x["box"][1]))
+                    logo_det = max(
+                        logo_detections,
+                        key=lambda x: (x["box"][2] - x["box"][0]) * (x["box"][3] - x["box"][1])
+                    )
                     logo_area = (logo_det["box"][2] - logo_det["box"][0]) * (logo_det["box"][3] - logo_det["box"][1])
                     logo_ratio = logo_area / img_area
-
                     if logo_ratio < 0.05:
                         logo_size = "Small"
                     elif logo_ratio < 0.15:
@@ -844,7 +851,7 @@ Format your response as a structured JSON."""
 
             # Format results
             result = {
-                "Objects visible": ", ".join(set(verified_objects)) if verified_objects else "None",
+                "Objects visible": objects_str,
                 "Brand logo visible": "Yes" if has_logo else "No",
                 "Brand logo size": logo_size,
             }
