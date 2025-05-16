@@ -48,7 +48,7 @@ class ObjectDetectionModule:
             try:
                 from ultralytics import YOLO
                 # Use the local model path
-                local_model_path = "backend/models/yolov8n.pt"
+                local_model_path = "models/yolov8n.pt"
                 self.yolo_model = YOLO(local_model_path)
                 print("YOLO model initialized successfully using local model")
             except Exception as e:
