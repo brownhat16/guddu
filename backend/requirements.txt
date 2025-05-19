@@ -6,7 +6,7 @@ pydantic==2.11.4
 starlette==0.46.2
 
 # Image processing libraries
-opencv-python-headless==4.8.0
+opencv-python-headless==4.8.0.76
 Pillow==11.2.1
 numpy==1.26.4
 
