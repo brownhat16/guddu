@@ -11,7 +11,7 @@ Pillow
 numpy
 
 # Machine learning and AI
-torch
+torch==2.1.2
 transformers
 ultralytics
 
