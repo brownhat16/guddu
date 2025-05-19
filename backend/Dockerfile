@@ -2,14 +2,14 @@ FROM python:3.10
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY backend.requirements.txt .
 
 RUN apt-get update && apt-get install -y libgl1-mesa-glx
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r backend.requirements.txt
 
 COPY . .
 
-CMD exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}
+CMD exec uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8080}
 
 
 
